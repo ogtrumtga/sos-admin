@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArrowUpRight, CheckCircle2, ChevronRight, CircleHelp, LayoutDashboard, LogOut, Map, Menu, Radio, ShieldCheck, Users, UsersRound, X } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, ChevronRight, CircleHelp, History, LayoutDashboard, LogOut, Map, Menu, Radio, ShieldCheck, Users, UsersRound, X } from 'lucide-react';
 import { api, session } from './api';
 import { useResource } from './hooks';
 import { ErrorNotice, Loading, Logo, initials } from './components';
 import Login from './Login';
 import Management from './Management';
 import SosMap from './SosMap';
+import RescueHistory from './RescueHistory';
 
 const nav = [
   { key: 'sos', label: 'Bản đồ SOS', icon: Map },
+  { key: 'history', label: 'Lịch sử cứu hộ', icon: History },
   { key: 'rescuers', label: 'Quản lý rescuer', icon: ShieldCheck },
   { key: 'teams', label: 'Đội cứu hộ', icon: UsersRound },
   { key: 'users', label: 'Người dùng', icon: Users },
@@ -66,7 +68,7 @@ function Console({ user, onLogout }) {
     <div className="main-shell"><header className="topbar"><div className="breadcrumb"><button className="icon-button mobile-menu" aria-label="Mở menu" onClick={() => setMobileOpen(true)}><Menu size={22}/></button><span>Không gian quản trị</span><ChevronRight size={14}/><strong>{current.label}</strong></div><div className="topbar-right"><span className="admin-access"><ShieldCheck size={15}/> Quyền ADMIN</span><span className="topbar-divider"/><button className="icon-button" aria-label="Hướng dẫn sử dụng" onClick={() => setHelp(!help)}><CircleHelp size={19}/></button><span className="avatar small">{initials(user.full_name)}</span></div></header>
     {help && <div className="help-banner"><div><strong>Hướng dẫn nhanh</strong><p>Bản đồ tự làm mới sau 15 giây. Chọn một SOS để xem vị trí và liên hệ. Dùng các mục quản lý để thêm, sửa, xóa tài khoản và đội cứu hộ. Tài khoản bị khóa hoặc bị thu hồi ADMIN sẽ mất quyền truy cập.</p></div><button className="icon-button" aria-label="Đóng hướng dẫn" onClick={() => setHelp(false)}><X size={18}/></button></div>}
     <main className="main-content"><div className="overview-strip"><span><i/> TỔNG QUAN HỆ THỐNG</span><span className="overview-date">Dữ liệu từ hệ thống SOS</span></div><div className="stat-grid">{statCards.map(({ label, value, sub, icon: Icon, color, target }) => <a href={`#${target}`} className="stat-card" key={label}><div><span className="stat-label">{label}</span><strong>{value == null ? '—' : new Intl.NumberFormat('vi-VN').format(value)}</strong><span className="stat-sub">{sub}</span></div><span className={`stat-icon ${color}`}><Icon size={22} strokeWidth={1.7}/></span><ArrowUpRight className="stat-arrow" size={15}/></a>)}</div><ErrorNotice message={error} retry={refresh}/>
-    {page === 'sos' ? <SosMap/> : <Management key={page} kind={page} onChanged={refresh} notify={setToast}/>}<footer className="app-footer"><span>SOS Rescue Console <i/> Trung tâm điều hành cứu hộ</span><span>Chung tay vì một cộng đồng an toàn.</span></footer></main></div>
+    {page === 'sos' ? <SosMap/> : page === 'history' ? <RescueHistory notify={setToast}/> : <Management key={page} kind={page} onChanged={refresh} notify={setToast}/>}<footer className="app-footer"><span>SOS Rescue Console <i/> Trung tâm điều hành cứu hộ</span><span>Chung tay vì một cộng đồng an toàn.</span></footer></main></div>
     {toast && <div className="toast" role="status"><CheckCircle2 size={19}/>{toast}<button aria-label="Đóng thông báo" onClick={() => setToast('')}><X size={16}/></button></div>}
   </div>;
 }

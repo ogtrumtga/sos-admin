@@ -6,6 +6,7 @@ Web quản trị React + Vite, kết nối FastAPI/PostgreSQL của dự án tro
 
 - Đăng nhập bằng số điện thoại và OTP Telegram. Chỉ tài khoản `ACTIVE` có thành viên đội với `role = 'ADMIN'` được vào trang quản trị.
 - Bản đồ Leaflet/OpenStreetMap: SOS công khai và riêng tư, tọa độ chính xác, bộ lọc trạng thái, tìm kiếm, chọn điểm xem chi tiết/liên hệ, tự cập nhật mỗi 15 giây. SOS thiếu tọa độ vẫn xuất hiện trong danh sách.
+- Xem toàn bộ lịch sử cứu hộ: Bộ lọc đa tiêu chí (từ khóa, trạng thái, loại sự cố, đội cứu hộ, khoảng thời gian từ ngày - đến ngày), phân trang, thẻ thống kê nhanh tỷ lệ giải cứu thành công, xuất file báo cáo CSV UTF-8, và modal xem chi tiết nhật ký cứu hộ (audit trail). Tự động fallback linh hoạt giữa API mới và API hiện có.
 - CRUD rescuer theo thành viên đội, gán đội và vai trò `ADMIN/LEADER/MEMBER/DRIVER/MEDIC`. Xóa rescuer gỡ thành viên, giữ tài khoản.
 - CRUD đội cứu hộ; xem danh sách đội viên; trạng thái BUSY được quản lý theo ca SOS.
 - CRUD người dùng, khóa/mở khóa, tìm kiếm và phân trang. Giữ lịch sử SOS bằng ràng buộc xóa của database.
@@ -86,6 +87,8 @@ Nền bản đồ OpenStreetMap và font Google cần Internet; lỗi tải nề
 | `/api/admin/me` | GET | Xác thực phiên quản trị |
 | `/api/admin/overview` | GET | Số liệu tổng quan |
 | `/api/admin/sos` | GET | SOS và vị trí hiện tại; `q`, `status` |
+| `/api/admin/sos/history` | GET | *(Mới)* Xem toàn bộ lịch sử cứu hộ; `q`, `status`, `team_id`, `emergency_type_id`, `from_date`, `to_date`, phân trang (chi tiết xem `docs/API_LICH_SU_CUU_HO_ADMIN.md`) |
+| `/api/admin/sos/{sos_id}/logs` | GET | *(Mới)* Lấy toàn bộ nhật ký kiểm toán ca cứu hộ cho ADMIN |
 | `/api/admin/users` | GET, POST | Tìm kiếm/phân trang, thêm tài khoản |
 | `/api/admin/users/{id}` | PUT, DELETE | Sửa/xóa tài khoản |
 | `/api/admin/rescuers` | GET, POST | Tìm kiếm/phân trang, thêm thành viên đội |
